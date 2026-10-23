@@ -55,6 +55,20 @@ if (!AccessGate.require('ספריית המעברים המלאה')) return;  // �
 - `AccessGate.onChange(cb)` נקרא בכל שינוי מצב. נשלח גם אירוע `accessgate:change` על `window`.
 - `AccessGate.open('plans' | 'account')` פותח מסך ידנית.
 
+## סטטיסטיקה לכל הכלים (`analytics.js`)
+
+קובץ נפרד שמחבר כל כלי ל־Google Analytics (מזהה `G-R1LC6L4T1J`, נכס אחד לכל `boazbareket1.github.io`). שורה אחת בתוך `<head>` של הכלי:
+
+```html
+<script src="https://boazbareket1.github.io/access-gate/analytics.js" data-tool="election-matchmaker"></script>
+```
+
+- `data-tool` הוא שם הכלי כפי שיופיע בדוחות. אם אין, נלקח שם התיקייה מהכתובת.
+- אירוע מותאם: `ToolsAnalytics.event('quiz_complete', { party_count: 3 })`.
+- **כדי שהכניסות שלך לא ייספרו:** פתח כל כלי פעם אחת עם `?no-track` בסוף הכתובת. זה נשמר בדפדפן. לביטול: `?track`.
+- מחוץ ל־`boazbareket1.github.io`, למשל בבדיקה מקומית, לא נשלח כלום.
+- כש־`gate.js` ו־`analytics.js` מחוברים יחד, התוסף מדווח לבד: `gate_trial_start`, `gate_locked_click`, `gate_plan_continue`, `gate_login`, `gate_purchase`.
+
 ## בדיקה
 
 `index.html` הוא דף הדגמה עם לוח בדיקה: הזזת זמן קדימה, סימולציה של התחברות ממכשיר אחר, ואיפוס.
@@ -67,3 +81,9 @@ if (!AccessGate.require('ספריית המעברים המלאה')) return;  // �
 4. אם יש בכלי ממשק שמסמן תוכן נעול, לעדכן אותו דרך `AccessGate.onChange`.
 5. להתאים `theme` ו־`accent` לעיצוב הכלי, ואת מיקום התג כך שלא יסתיר כפתורים.
 6. לא לשנות את `gate.js` בשביל כלי בודד. התאמות נעשות רק דרך ההגדרות.
+
+## הוראות ל־Claude: חיבור הסטטיסטיקה לכלי
+
+1. להוסיף את שורת `analytics.js` בתוך `<head>`, עם `data-tool` קצר באנגלית.
+2. לזהות 1–3 רגעי מפתח בכלי (סיום שאלון, יצירת מפגש, שיתוף) ולהוסיף בהם `ToolsAnalytics.event(...)` עם שמות באנגלית ב־snake_case.
+3. לא לשלוח תוכן אישי שהמשתמש כתב, כמו שמות, תשובות פתוחות או טקסט חופשי. רק מספרים ובחירות כלליות.

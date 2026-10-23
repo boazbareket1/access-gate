@@ -1,5 +1,5 @@
 /*!
- * Access Gate v0.1.0 — תוסף גישה בתשלום לכלים של בועז ברקת
+ * Access Gate v0.2.0 — תוסף גישה בתשלום לכלים של בועז ברקת
  * שלב 1: backend מדומה (localStorage). אין התחברות אמיתית ואין חיוב.
  *
  * שימוש:
@@ -13,7 +13,7 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.1.0';
+  var VERSION = '0.2.0';
   var DAY = 86400000;
 
   /* ---------- אחסון מקומי בטוח ---------- */
@@ -213,6 +213,17 @@
 
     now: function () { return this.backend.now(); },
 
+    /* דיווח לסטטיסטיקה, אם analytics.js מחובר לכלי */
+    _track: function (name, params) {
+      try {
+        if (window.ToolsAnalytics) {
+          var p = { gate_tool: this.cfg ? this.cfg.toolId : '' };
+          for (var k in params) p[k] = params[k];
+          window.ToolsAnalytics.event(name, p);
+        }
+      } catch (e) {}
+    },
+
     init: function (cfg) {
       var self = this;
       if (this._ready) return this._ready;
@@ -252,6 +263,7 @@
     beginTrial: function (silent) {
       if (!LS.get(this._trialKey(), null)) {
         LS.set(this._trialKey(), this.now());
+        this._track('gate_trial_start', {});
         if (!silent) this.refresh();
       }
     },
@@ -311,6 +323,7 @@
     require: function (reason) {
       if (this.hasAccess()) return true;
       this.ui.reason = reason || '';
+      this._track('gate_locked_click', { reason: reason || '' });
       this.open('plans');
       return false;
     },
@@ -526,7 +539,8 @@
         case 'badge': return this.open(this.user ? 'account' : 'plans');
         case 'go': this.ui.screen = v; this.ui.msg = ''; return this._render();
         case 'plan': this.ui.planId = v; return this._render();
-        case 'continue': this.ui.screen = this.user ? 'checkout' : 'login'; return this._render();
+        case 'continue': this._track('gate_plan_continue', { plan: this.ui.planId });
+          this.ui.screen = this.user ? 'checkout' : 'login'; return this._render();
         case 'google': return this._signIn({ method: 'google' });
         case 'email': {
           var em = (this._wrap.querySelector('#ag-email') || {}).value || '';
@@ -537,6 +551,7 @@
         case 'pay-ok':
           el.disabled = true;
           return this.backend.mockCompletePurchase(this.user.email, this.cfg.toolId, this._plan()).then(function () {
+            self._track('gate_purchase', { plan: self.ui.planId, mock: self.backend.name === 'mock' });
             return self.refresh();
           }).then(function () { self.ui.screen = 'success'; self._render(); });
         case 'pay-fail': this.ui.screen = 'failed'; return this._render();
@@ -555,6 +570,7 @@
       this._fromLoginOnly = this.ui.screen === 'login-only';
       return this.backend.signIn(opts).then(function (u) {
         self.user = u;
+        self._track('gate_login', { method: opts.method });
         return self.backend.registerDevice(u.email, { id: deviceId(), name: deviceName() }, cfg.maxDevices);
       }).then(function (r) {
         return self.refresh().then(function () {
