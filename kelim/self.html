@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>כלים לידע עצמי · הזמנה למשוב</title>
+<meta name="description" content="הזמנה אישית מבועז ברקת: להיות מהראשונים להשתמש בכלים ולשתף משוב, כלי אחד בכל פעם.">
+<meta property="og:title" content="כלים לידע עצמי · הזמנה למשוב">
+<meta property="og:description" content="הזמנה אישית להיות מהראשונים להשתמש בכלים ולשתף משוב, כלי אחד בכל פעם.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://boazbareket1.github.io/access-gate/kelim/self.html">
+<meta property="og:image" content="https://boazbareket1.github.io/access-gate/kelim/self.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Assistant:wght@400;600;700&display=swap">
+<style>
+/* Layout: a personal letter of invitation on warm paper, then the tools as a numbered sequence the reader works through one at a time. */
+:root{
+  --bg:#f6f2ea; --paper:#fffdf8; --ink:#1f2421; --muted:#5f665f; --line:#e2dccf;
+  --accent:#2f6f73; --ok:#2f7d55; --soft:color-mix(in srgb,var(--accent) 12%,var(--paper));
+  --display:"Frank Ruhl Libre",Georgia,serif; --body:"Assistant",system-ui,"Segoe UI",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#171a18; --paper:#202421; --ink:#ece8df; --muted:#a6ada5; --line:#333a35;
+  --accent:color-mix(in srgb,#2f6f73 55%,#fff); --ok:#5cc58d; --soft:color-mix(in srgb,#2f6f73 22%,#202421);color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17.5px;line-height:1.6;
+  padding:max(28px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(48px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.wrap{max-width:760px;margin:0 auto;display:grid;gap:28px}
+h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.2;margin:0;text-wrap:balance}
+p{margin:0}
+.kicker{font-size:14px;font-weight:700;letter-spacing:.04em;color:var(--accent)}
+h1{font-size:clamp(32px,7vw,46px)}
+.letter{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:26px 24px;display:grid;gap:14px;box-shadow:0 1px 0 var(--line)}
+.letter p{max-width:62ch}
+.sign{font-weight:700;color:var(--muted)}
+h2{font-size:26px}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:12px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+.steps li::before{counter-increment:s;content:counter(s);font-family:var(--display);font-weight:700;font-size:20px;width:38px;height:38px;border-radius:50%;
+  display:grid;place-items:center;background:var(--soft);color:var(--accent)}
+.steps b{display:block}
+.ask{background:var(--soft);border-radius:14px;padding:16px 18px;display:grid;gap:6px}
+.ask ul{margin:0;padding-inline-start:20px;display:grid;gap:3px}
+.progress{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-weight:600}
+.bar{flex:1;min-width:160px;height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ok);border-radius:4px;transition:width .3s}
+.tools{list-style:none;margin:0;padding:0;display:grid;gap:16px}
+.tool{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:grid;grid-template-columns:260px minmax(0,1fr)}
+.tool.next{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.tool.is-done{opacity:.8}
+.shot{background:var(--soft)}
+.shot img{display:block;width:100%;height:100%;object-fit:cover;object-position:right center;aspect-ratio:1200/630}
+.noimg{height:100%;min-height:136px;display:grid;place-items:center;font-size:40px;color:var(--accent)}
+.body{padding:16px 18px;display:grid;gap:8px;align-content:start;min-width:0}
+.row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.num{font-family:var(--display);font-weight:700;color:var(--accent);font-size:20px}
+h3{font-size:22px}
+.state{font-size:13px;font-weight:700;border-radius:999px;padding:2px 10px}
+.next .state{background:var(--accent);color:var(--paper)}
+.is-done .state{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.body p{color:var(--muted);font-size:16px}
+.acts{display:flex;gap:10px 16px;align-items:center;flex-wrap:wrap;margin-top:4px}
+.go{display:inline-block;background:var(--accent);color:var(--paper);text-decoration:none;font-weight:700;border-radius:999px;padding:8px 18px}
+.done{display:inline-flex;align-items:center;gap:7px;font-size:15px;cursor:pointer;color:var(--muted)}
+.done input{width:19px;height:19px;accent-color:var(--ok)}
+a:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.thanks{text-align:center;display:grid;gap:8px;padding:8px 0}
+.thanks p{color:var(--muted);max-width:52ch;margin:0 auto}
+.thanks .sign{color:var(--ink)}
+footer{font-size:14px;color:var(--muted);text-align:center;border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:620px){.tool{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header style="display:grid;gap:8px">
+    <span class="kicker">הזמנה אישית · בועז ברקת</span>
+    <h1>כלים לידע עצמי</h1>
+  </header>
+
+  <section class="letter" aria-label="פתיחה">
+    <p><b>קודם כול, תודה.</b> הסכמת להיות מהראשונים להשתמש בכלים האלה ולשתף אותי במשוב, וזה חשוב לי מאוד.</p>
+    <p>הכלים נבנו עבור אנשי מקצוע בתחומי הידע העצמי, והם עדיין בשלב פיתוח. העין המקצועית שלך היא בדיוק מה שיעזור להם להבשיל, ולכן כל משוב שלך חשוב לי מאוד.</p>
+    <p class="sign">— בועז</p>
+  </section>
+
+  <section style="display:grid;gap:14px" aria-labelledby="how">
+    <h2 id="how">איך עובדים: כלי אחד בכל פעם</h2>
+    <ol class="steps">
+      <li><span><b>בוחרים כלי אחד.</b> מומלץ להתחיל מהראשון ברשימה.</span></li>
+      <li><span><b>משתמשים בו לעומק.</b> לנסות אותו באמת, כמו בעבודה עצמה, ולשים לב מה עובד ומה מפריע.</span></li>
+      <li><span><b>שולחים לי משוב בוואטסאפ.</b> מסמנים כאן "שלחתי משוב", ורק אז עוברים להעמיק בכלי הבא.</span></li>
+    </ol>
+    <div class="ask">
+      <b>על מה כדאי לכתוב לי</b>
+      <ul>
+        <li>מה עבד טוב, ומה היה הכי שימושי?</li>
+        <li>איפה היה מבלבל, או איפה נתקעת?</li>
+        <li>האם הכלי מתאים לעבודה שלך, ועם מי?</li>
+        <li>מה חסר, ומה מיותר?</li>
+      </ul>
+    </div>
+  </section>
+
+  <section style="display:grid;gap:14px" aria-labelledby="list">
+    <h2 id="list">5 הכלים, לפי הסדר</h2>
+    <div class="progress"><span id="prog">0 מתוך 5 כלים</span><div class="bar" aria-hidden="true"><i id="bar"></i></div></div>
+    <ol class="tools" id="tools">
+<li class="tool" data-id="numerology"><div class="shot"><img src="https://boazbareket1.github.io/numerology-map/og.jpg" alt="" loading="lazy"></div><div class="body">
+<div class="row"><span class="num">1</span><h3>מפת המספרים</h3><span class="state"></span></div>
+<p>ניתוח אישיות לפי תאריך הלידה והשם, בגימטריה עברית ובשיטה הפיתגוראית, כולל התאמה זוגית ותחזית.</p>
+<div class="acts"><a class="go" href="https://boazbareket1.github.io/numerology-map/?s=pro" target="_blank" rel="noopener">כניסה לכלי ↗</a>
+<label class="done"><input type="checkbox" id="done-numerology"> שלחתי משוב על הכלי הזה</label></div></div></li>
+<li class="tool" data-id="grapholog"><div class="shot"><img src="https://boazbareket1.github.io/grapholog/og.jpg" alt="" loading="lazy"></div><div class="body">
+<div class="row"><span class="num">2</span><h3>הגרפולוג</h3><span class="state"></span></div>
+<p>כותבים דף ביד, מצלמים, ומקבלים קריאה של הכתב והאישיות ונקודות למחשבה.</p>
+<div class="acts"><a class="go" href="https://boazbareket1.github.io/grapholog/?s=pro" target="_blank" rel="noopener">כניסה לכלי ↗</a>
+<label class="done"><input type="checkbox" id="done-grapholog"> שלחתי משוב על הכלי הזה</label></div></div></li>
+<li class="tool" data-id="chakra-compass"><div class="shot"><img src="https://boazbareket1.github.io/chakra-compass/og.jpg" alt="" loading="lazy"></div><div class="body">
+<div class="row"><span class="num">3</span><h3>נתיב האור</h3><span class="state"></span></div>
+<p>מסע תלת־ממדי בין מרכזי האנרגיה בגוף, שבסופו נבנה מסע אנרגטי אישי.</p>
+<div class="acts"><a class="go" href="https://boazbareket1.github.io/chakra-compass/?s=pro" target="_blank" rel="noopener">כניסה לכלי ↗</a>
+<label class="done"><input type="checkbox" id="done-chakra-compass"> שלחתי משוב על הכלי הזה</label></div></div></li>
+<li class="tool" data-id="maagal-hagashama"><div class="shot"><img src="https://boazbareket1.github.io/maagal-hagashama/og.jpg" alt="" loading="lazy"></div><div class="body">
+<div class="row"><span class="num">4</span><h3>מעגל הגשמה</h3><span class="state"></span></div>
+<p>גלגל המזלות ככלי להיכרות עצמית: מדרגים תכונות ומגלים את המפה האישית.</p>
+<div class="acts"><a class="go" href="https://boazbareket1.github.io/maagal-hagashama/?s=pro" target="_blank" rel="noopener">כניסה לכלי ↗</a>
+<label class="done"><input type="checkbox" id="done-maagal-hagashama"> שלחתי משוב על הכלי הזה</label></div></div></li>
+<li class="tool" data-id="values-galaxy"><div class="shot"><img src="https://boazbareket1.github.io/values-galaxy/og.jpg" alt="" loading="lazy"></div><div class="body">
+<div class="row"><span class="num">5</span><h3>מפת התובנות</h3><span class="state"></span></div>
+<p>מסע תלת־ממדי בין כוכבים, שבכל אחד מהם מחכה ערך או תובנה.</p>
+<div class="acts"><a class="go" href="https://boazbareket1.github.io/values-galaxy/?s=pro" target="_blank" rel="noopener">כניסה לכלי ↗</a>
+<label class="done"><input type="checkbox" id="done-values-galaxy"> שלחתי משוב על הכלי הזה</label></div></div></li>
+    </ol>
+  </section>
+
+  <section class="thanks">
+    <h2>תודה על שיתוף הפעולה</h2>
+    <p>ועל ההסכמה להיות מהראשונים להשתמש בכלים ולתת משוב. כל הערה שלך תתקבל באהבה ותעזור לכלים לצמוח.</p>
+    <p class="sign">בועז ברקת</p>
+  </section>
+
+  <footer>הכלים בשלב פיתוח. בהמשך הם יעברו לשלב הבא, ואעדכן.</footer>
+</main>
+<script>
+(function(){
+  var KEY="feedback-progress:self",done={};
+  try{done=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){}
+  var items=[].slice.call(document.querySelectorAll(".tool")),n=items.length;
+  function render(){
+    var c=0,nextSet=false;
+    items.forEach(function(li){
+      var id=li.dataset.id,isDone=!!done[id];
+      li.querySelector("input").checked=isDone;
+      li.classList.toggle("is-done",isDone);
+      var isNext=!isDone&&!nextSet; if(isNext)nextSet=true;
+      li.classList.toggle("next",isNext);
+      li.querySelector(".state").textContent=isDone?"✓ נשלח משוב":(isNext?"הכלי הבא שלך":"");
+      if(isDone)c++;
+    });
+    document.getElementById("prog").textContent=c===n?"סיימת את כל "+n+" הכלים. תודה רבה!":"שלחת משוב על "+c+" מתוך "+n+" כלים";
+    document.getElementById("bar").style.width=(c/n*100)+"%";
+  }
+  items.forEach(function(li){
+    li.querySelector("input").addEventListener("change",function(e){
+      done[li.dataset.id]=e.target.checked;
+      try{localStorage.setItem(KEY,JSON.stringify(done))}catch(err){}
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>
