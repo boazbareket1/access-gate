@@ -7,7 +7,9 @@
  * מה זה עושה:
  * - בכניסה הראשונה לכלי נפתח כרטיס קצר: מה הכלי מציע, איך משתמשים בו בכמה צעדים,
  *   ואם הכלי בפיתוח – הזמנה למשוב.
- * - תג קטן בפינה ("איך משתמשים · בפיתוח") פותח את הכרטיס שוב בכל רגע.
+ * - תג קטן ("?") פותח את הכרטיס שוב בכל רגע. אחרי הכניסה הראשונה הוא מתכווץ לעיגול קטן
+ *   באמצע הצד השמאלי, כדי לא להסתיר כפתורים. מיקום אחר: data-pos="top-left" / "top-right" / "bottom-right".
+ * - מצב בעלים: ?owner=on בכתובת של כלי כלשהו מכבה את הכרטיס והתג בכל הכלים בדפדפן הזה (?owner=off מבטל).
  *
  * עריכה:
  * - GUIDES: ההסבר לכל כלי. כלי חדש = מוסיפים כאן רשומה.
@@ -213,9 +215,35 @@
     }
   };
 
+  /* מצב בעלים: פותחים פעם אחת כל כלי עם ?owner=on (ומבטלים עם ?owner=off).
+   * נשמר בדפדפן לכל הכלים באתר: בלי כרטיס פתיחה, בלי תג, ורמת "איש מקצוע" כברירת מחדל. */
+  var OWNER_KEY = "bb-owner";
+  try {
+    var om = new URLSearchParams(location.search).get("owner");
+    if (om === "on") localStorage.setItem(OWNER_KEY, "1");
+    if (om === "off") localStorage.removeItem(OWNER_KEY);
+  } catch (e) {}
+  var owner = false;
+  try { owner = localStorage.getItem(OWNER_KEY) === "1"; } catch (e) {}
+  window.BBOwner = owner;
+
   var me = document.currentScript;
   var tool = (me && me.getAttribute("data-tool")) || location.pathname.split("/")[1] || "tool";
+  var pos = (me && me.getAttribute("data-pos")) || "edge";
   var status = STATUS[tool] || STATUS._default;
+  if (owner) {
+    var setOwnerLevel = function () {
+      var lv = "pro";
+      try { lv = sessionStorage.getItem("tool-level:" + tool) || localStorage.getItem("tool-level:" + tool) || "pro"; } catch (e) {}
+      document.documentElement.setAttribute("data-user-level", lv);
+      window.ToolLevel = { get: function () { return lv; }, set: function (v) {
+        lv = v; document.documentElement.setAttribute("data-user-level", v);
+        try { localStorage.setItem("tool-level:" + tool, v); window.dispatchEvent(new CustomEvent("toollevel", { detail: { level: v } })); } catch (e) {}
+      } };
+    };
+    setOwnerLevel();
+    return;
+  }
   if (status === "off") return;
   var stage = STAGE[status] || STAGE.dev;
   var guide = GUIDES[tool];
@@ -246,6 +274,13 @@
       "direction:rtl;display:inline-flex;align-items:center;gap:7px;border:0;cursor:pointer;border-radius:999px;padding:7px 13px 7px 12px;" +
       "font-size:13px;font-weight:600;line-height:1;color:#1d2a24;background:rgba(255,248,232,.94);box-shadow:0 4px 14px rgba(0,0,0,.22),0 0 0 1px rgba(0,0,0,.06);opacity:.9}" +
       ".pill:hover,.pill:focus-visible{opacity:1}" +
+      /* תג מכווץ: עיגול קטן בצד, כדי לא להסתיר כפתורים של הכלי */
+      ".pill.mini{padding:0;width:30px;height:30px;justify-content:center;gap:0;opacity:.75}" +
+      ".pill.mini .lbl{display:none}" +
+      ".pill.mini.edge{bottom:auto;top:50%;transform:translateY(-50%);left:max(6px,env(safe-area-inset-left,0px))}" +
+      ".pill.mini.top-left{bottom:auto;top:calc(12px + env(safe-area-inset-top,0px))}" +
+      ".pill.mini.top-right,.pill.bottom-right{left:auto;right:max(12px,env(safe-area-inset-right,0px))}" +
+      ".pill.mini.top-right{bottom:auto;top:calc(12px + env(safe-area-inset-top,0px))}" +
       ".pill:focus-visible,.ok:focus-visible,.x:focus-visible{outline:3px solid #d98a1f;outline-offset:2px}" +
       ".dot{width:8px;height:8px;border-radius:50%;background:#e0a21c;box-shadow:0 0 6px #e0a21c;flex:none}" +
       ".q{width:16px;height:16px;border-radius:50%;background:#1d2a24;color:#fff8e8;display:grid;place-items:center;font-size:11px;font-weight:700;flex:none}" +
@@ -278,9 +313,13 @@
 
     var pill = el("button", "pill");
     pill.type = "button";
-    pill.appendChild(el("span", stage.lines.length ? "dot" : "q", stage.lines.length ? "" : "?"));
-    pill.appendChild(el("span", "", guide ? stage.pill : "בפיתוח · אשמח להערות"));
-    pill.setAttribute("aria-label", "פתיחת הסבר על הכלי");
+    pill.appendChild(el("span", "q", "?"));
+    pill.appendChild(el("span", "lbl", guide ? stage.pill : "בפיתוח · אשמח להערות"));
+    pill.setAttribute("aria-label", guide ? stage.pill : "פתיחת הסבר על הכלי");
+    pill.title = guide ? stage.pill : "בפיתוח · אשמח להערות";
+    pill.classList.add(pos);
+    function shrink() { pill.classList.add("mini"); }
+    if (seen) shrink();
     root.appendChild(pill);
 
     // רמת השימוש לכניסה הנוכחית: נשמרת לסשן, וברירת המחדל היא הבחירה הקודמת
@@ -300,6 +339,7 @@
       if (!back) return;
       back.remove(); back = null;
       try { localStorage.setItem(KEY, "1"); } catch (e) {}
+      shrink();
       pill.focus({ preventScroll: true });
     }
     function open() {

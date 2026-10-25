@@ -297,7 +297,16 @@
       var trialStart = LS.get(this._trialKey(), null);
       var trialEnd = trialStart ? trialStart + cfg.trialDays * DAY : null;
       var s;
-      if (this.pass && this.pass.until > now) {
+      var owner = false;
+      try {
+        var om = new URLSearchParams(location.search).get('owner');
+        if (om === 'on') localStorage.setItem('bb-owner', '1');
+        if (om === 'off') localStorage.removeItem('bb-owner');
+        owner = localStorage.getItem('bb-owner') === '1';
+      } catch (e) {}
+      if (owner) {
+        s = { name: 'active', until: now + 3650 * DAY, daysLeft: 3650, owner: true };
+      } else if (this.pass && this.pass.until > now) {
         s = { name: 'active', until: this.pass.until, daysLeft: daysBetween(now, this.pass.until) };
       } else if (trialEnd && now < trialEnd && cfg.trialDays > 0) {
         s = { name: 'trial', until: trialEnd, daysLeft: daysBetween(now, trialEnd) };
@@ -367,6 +376,7 @@
     _renderBadge: function () {
       var pos = this.cfg.badge;
       if (!pos || pos === 'none') return;
+      if (this.state.owner) { this._drop('badge'); return; }
       var s = this.state; var txt;
       if (s.name === 'active') txt = 'גישה מלאה';
       else if (s.name === 'trial') txt = 'ניסיון · ' + (s.daysLeft === 1 ? 'יום אחרון' : 'עוד ' + s.daysLeft + ' ימים') + ' · <b>שדרוג</b>';
